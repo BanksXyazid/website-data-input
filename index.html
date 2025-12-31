@@ -1,0 +1,45 @@
+<form id="dataForm">
+  <input type="text" id="nama" placeholder="Nama" required>
+  <input type="text" id="id" placeholder="ID" required>
+  <input type="date" id="tanggalLahir" required>
+  <input type="text" id="nomorWA" placeholder="Nomor WhatsApp" required>
+  <input type="text" id="alamat" placeholder="Alamat Rumah" required>
+  <button type="submit">Simpan</button>
+</form>
+
+<script>
+  document.getElementById('dataForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Mencegah form reload halaman
+    
+    // Ambil nilai dari input
+    var data = {
+      nama: document.getElementById('nama').value,
+      id: document.getElementById('id').value,
+      tanggalLahir: document.getElementById('tanggalLahir').value,
+      nomorWA: document.getElementById('nomorWA').value,
+      alamat: document.getElementById('alamat').value
+    };
+    
+    // Kirim data ke Google Apps Script
+    fetch('https://script.google.com/macros/s/AKfycbyXs4-rsfqlUFXVOLKwEVs8zwwkfe45IjXXBOTCNx7R55zuxWosDemsKaS7nG4-m55S4w/exec', {  // URL sekarang dalam tanda kutip
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.status === 'success') {
+        alert('Data berhasil disimpan!');
+        // Reset form jika mau
+        document.getElementById('dataForm').reset();
+      } else {
+        alert('Error: ' + result.message);
+      }
+    })
+    .catch(error => {
+      alert('Terjadi kesalahan: ' + error);
+    });
+  });
+</script>
